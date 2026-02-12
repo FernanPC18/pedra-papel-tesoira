@@ -1,9 +1,12 @@
-# Listado 1.13: Implementación base del juego piedra, papel o tijeras.
 import random
 
 ROCK = "rock"
 PAPER = "paper"
 SCISSORS = "scissors"
+
+
+class IncorrectOptionException(Exception):
+    pass
 
 
 def assess_game(user_action, computer_action):
@@ -34,12 +37,20 @@ def assess_game(user_action, computer_action):
 
 def main():
     game_actions = [ROCK, PAPER, SCISSORS]
-    while True:
-        user_action = input("\nPick a choice: rock, paper or scissors: ")
-        computer_action = random.choice(game_actions)
 
-        print(f"\nYou picked {user_action}. The computer picked {computer_action}\n")
-        assess_game(user_action, computer_action)
+    while True:
+        try:
+            user_action = input("\nPick a choice: rock, paper or scissors: ").lower()
+            if user_action not in game_actions:
+                raise IncorrectOptionException
+            computer_action = random.choice(game_actions)
+
+            print(
+                f"\nYou picked {user_action}. The computer picked {computer_action}\n"
+            )
+            assess_game(user_action, computer_action)
+        except IncorrectOptionException:
+            print("\nYou can only picked rock, paper or scissors!")
 
 
 if __name__ == "__main__":
