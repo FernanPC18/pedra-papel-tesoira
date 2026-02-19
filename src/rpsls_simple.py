@@ -34,15 +34,13 @@ class Game:
         game_result = None
 
         if user_action == computer_action:
-            print(f"User and computer picked {user_action.name}. Draw game!")
+            print(f"User picked {user_action.name}. Draw game!")
             game_result = GameResult.Tie
         elif computer_action in Victories[user_action]:
-            print(
-                f"User and computer picked {user_action.name}. You lost, skill issue!"
-            )
+            print(f"User picked {user_action.name}.You lost, skill issue!")
             game_result = GameResult.Defeat
         else:
-            print(f"User and computer picked {user_action.name}. Win game!")
+            print(f"User picked {user_action.name}.Win game!")
             game_result = GameResult.Victory
 
         return game_result
@@ -69,23 +67,22 @@ class Game:
         another_round = input("\nAnother round? (y/n): ")
         return another_round.lower() == "y"
 
+    def main(self):
 
-def main():
+        while True:
+            try:
+                user_action = Game.get_user_action()
+            except ValueError:
+                range_str = f"[0, {len(GameAction) - 1}]"
+                print(f"Invalid selection. Pick a choice in range {range_str}!")
+                continue
 
-    while True:
-        try:
-            user_action = Game.get_user_action()
-        except ValueError:
-            range_str = f"[0, {len(GameAction) - 1}]"
-            print(f"Invalid selection. Pick a choice in range {range_str}!")
-            continue
+            computer_action = Game.get_computer_action()
+            Game().assess_game(user_action, computer_action)
 
-        computer_action = Game.get_computer_action()
-        Game.assess_game(user_action, computer_action)
-
-        if not Game.play_another_round():
-            break
+            if not Game.play_another_round():
+                break
 
 
 if __name__ == "__main__":
-    Game.assess_game(user_action=GameAction.Paper, computer_action=GameAction.Scissors)
+    Game().main()
